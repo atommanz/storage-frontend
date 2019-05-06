@@ -28,87 +28,13 @@ class App extends Component {
     }
   }
 
-  componentWillMount() {
-    if (Cookies.get('pos-token') && window.sessionStorage.getItem('pos_role')) {
-      console.log('aa')
-      this.setState({
-        verified: true,
-      })
-    }
-  }
-
-
-  nextPath(path) {
-    this.props.history.push(path);
-  }
-
-  _onLogin = (e) => {
-    e.preventDefault()
-    this.setState({ loggingIn: true }, async () => {
-      apiFetch({
-        url: '/user/login',
-        method: 'POST',
-        body: {
-          username: this.state.email,
-          password: this.state.password,
-        },
-      }).then(async (res) => {
-        // console.log('res', res)
-        if (res.success) {
-          // console.log(res.data)
-          // Cookies.set('kassone-token', res.data.sAMAccountName)
-          await this._onVerify(res.data.sAMAccountName)
-          this.setState({
-            loggingIn: false,
-          })
-          // , async () => { this._verify() })
-        } else {
-          this.setState({
-            loggingIn: false,
-            errorMessage: (res.message ? 'Username หรือ Password ไม่ถูกต้อง' : 'Username หรือ Password ไม่ถูกต้อง'),
-          })
-        }
-      })
-    })
-  }
-
-  _onVerify = (e) => {
-    // e.preventDefault()
-    apiFetch({
-      url: '/user/verify',
-      method: 'POST',
-      body: {
-        username: e,
-      },
-    }).then(async (res) => {
-      if (res.success) {
-        console.log(res)
-        console.log(res.data.role)
-        // console.log(res.data)
-        Cookies.set('pos-token', res.data.username)
-        window.sessionStorage.setItem('pos_role', res.data.role)
-        // await Cookies.set('kassone-role-user', res.data.role)
-        this.setState({
-            verified: true,
-          })
-        // , async () => { this._verify() })
-      } else {
-        this.setState({
-          loggingIn: false,
-          errorMessage: (res.message ? 'ขอสิทธิการเข้าได้ที่ IT' : 'ขอสิทธิการเข้าได้ที่ IT'),
-        })
-      }
-
-
-    })
-  }
-
 
 
   render() {
     return (
       <div>
-        {this.state.verified ? (
+         <Route path="/" component={Main} />
+        {/* {this.state.verified ? (
           <Route path="/" component={Main} />
         ) :
           (
@@ -131,7 +57,7 @@ class App extends Component {
                 {this.state.errorMessage ? (<Alert message={this.state.errorMessage} type="error" />) : ''}
               </LoginVerticalContainer>
             </LoginContainer>
-          )}
+          )} */}
       </div>
 
     );
