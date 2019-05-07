@@ -34,6 +34,21 @@ class UploadStaffData extends Component {
         this.setState({ createBody: { ...this.state.createBody, category: 'food' } })
     }
 
+    apiCreateProduct() {
+        apiFetch({
+            url: `product`,
+            method: 'POST',
+            body: this.state.createBody
+        })
+            .then((res) => {
+                console.log(res)
+                this.setState({
+                    showCreateModal: false,
+                });
+                // this.props.history.push(`/storage`)
+                this.apiGetList()
+            })
+    }
 
     apiGetList() {
         apiFetch({
@@ -49,6 +64,22 @@ class UploadStaffData extends Component {
             //   console.log(this.state.Datame)
         })
     }
+
+    apiGetDetail(productId) {
+        apiFetch({
+            url: `product/${productId}`,
+            method: 'GET',
+            // query: {
+            //     category: this.state.filterCategory,
+            //     status: this.state.filterStatus
+            // },
+        }).then((res) => {
+            this.setState({ listData: res.data })
+            console.log('listData', this.state.listData)
+            //   console.log(this.state.Datame)
+        })
+    }
+
     selectCategoryChange = async (value) => {
         await this.setState({ filterCategory: value })
         await this.apiGetList()
@@ -64,11 +95,14 @@ class UploadStaffData extends Component {
         });
     }
 
-    handleCreateOk = (e) => {
+    handleCreateOk = async (e) => {
         console.log(e);
+        const idProduct = await this.apiCreateProduct()
+        console.log(`create id : ${idProduct}`)
         this.setState({
             showCreateModal: false,
         });
+
     }
 
     handleCreateCancel = (e) => {
@@ -78,6 +112,20 @@ class UploadStaffData extends Component {
             createBody: {}
         });
     }
+
+    infoModal(productId) {
+        Modal.info({
+          title: 'Product Detail',
+          content: (
+            <div>
+              <p>some messages...some messages...</p>
+              <p>some messages...some messages...</p>
+            </div>
+          ),
+          onOk() {},
+        });
+      }
+      
     render() {
 
         const columns = [{
@@ -115,8 +163,8 @@ class UploadStaffData extends Component {
         {
             title: 'Action',
             key: 'action',
-            render: (text, record) => (
-                <span>
+            render: (text, record) => (record.status === 'A' ?
+                (<span>
                     <Button
                         type="primary"
                         onClick={(e) => {
@@ -125,7 +173,17 @@ class UploadStaffData extends Component {
                     ><Icon type="dollar" />
 
                     </Button>
-                </span>
+                </span>) : (<span>
+                    <Button
+                        type="secondary"
+                        onClick={(e) => {
+                            this.props.history.push(`/storage/${record._id}`)
+                            this.infoModal(record._id)
+                        }}
+                    >
+                       <Icon type="search" />
+                    </Button>
+                </span>)
             ),
         }
         ];
@@ -194,7 +252,7 @@ class UploadStaffData extends Component {
                     </FormItem>
                     <FormItem labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} label="Start Date* " style={{ display: 'flex' }}>
                         <DatePicker
-                            value={moment(this.state.createBody.startDate)}
+                            // value={moment(this.state.createBody.startDate)}
                             format="DD/MM/YYYY HH:mm:ss"
                             showTime
                             placeholder="Select Time"
