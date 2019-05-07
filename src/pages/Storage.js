@@ -21,7 +21,9 @@ class UploadStaffData extends Component {
             filterCategory: '',
             filterStatus: '',
             showCreateModal: false,
-            createBody: {}
+            showInfoModal: false,
+            createBody: {},
+            productDetail: {}
         }
 
         // this.onUploadChange = this.onUploadChange.bind(this)
@@ -69,13 +71,9 @@ class UploadStaffData extends Component {
         apiFetch({
             url: `product/${productId}`,
             method: 'GET',
-            // query: {
-            //     category: this.state.filterCategory,
-            //     status: this.state.filterStatus
-            // },
-        }).then((res) => {
-            this.setState({ listData: res.data })
-            console.log('listData', this.state.listData)
+        }).then(async (res) => {
+            await this.setState({ productDetail: res.data, showInfoModal: true })
+            console.log('res.data', res.data)
             //   console.log(this.state.Datame)
         })
     }
@@ -113,19 +111,21 @@ class UploadStaffData extends Component {
         });
     }
 
-    infoModal(productId) {
-        Modal.info({
-          title: 'Product Detail',
-          content: (
-            <div>
-              <p>some messages...some messages...</p>
-              <p>some messages...some messages...</p>
-            </div>
-          ),
-          onOk() {},
+    handleInfoOk = async (e) => {
+        this.setState({
+            showInfoModal: false,
         });
-      }
-      
+
+    }
+
+    handleInfoCancel = (e) => {
+        this.setState({
+            showInfoModal: false,
+        });
+    }
+
+
+
     render() {
 
         const columns = [{
@@ -178,10 +178,10 @@ class UploadStaffData extends Component {
                         type="secondary"
                         onClick={(e) => {
                             this.props.history.push(`/storage/${record._id}`)
-                            this.infoModal(record._id)
+                            this.apiGetDetail(record._id)
                         }}
                     >
-                       <Icon type="search" />
+                        <Icon type="search" />
                     </Button>
                 </span>)
             ),
@@ -218,7 +218,7 @@ class UploadStaffData extends Component {
 
                 </Card>
                 <Modal
-                    title="Basic Modal"
+                    title="New Product"
                     visible={this.state.showCreateModal}
                     onOk={this.handleCreateOk}
                     onCancel={this.handleCreateCancel}
@@ -282,6 +282,27 @@ class UploadStaffData extends Component {
                         <InputNumber value={this.state.createBody.weight} min={0} max={100000} step={1} style={{ width: '50%' }} onChange={(e) => { this.setState({ createBody: { ...this.state.createBody, weight: String(e) } }) }} />
                     </FormItem>
 
+                </Modal>
+
+
+                <Modal
+                    title="Product Detail"
+                    visible={this.state.showInfoModal}
+                    onOk={this.handleInfoOk}
+                    onCancel={this.handleInfoCancel}
+                >
+                    <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 16}} label="Name " style={{ display: 'flex' }}>
+                        <label>{this.state.productDetail.name}</label>
+                    </FormItem>
+                    <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 16}}  label="Start Date " style={{ display: 'flex' }}>
+                        <label>{this.state.productDetail.startDate}</label>
+                    </FormItem>
+                    <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 16}}  label="End Date " style={{ display: 'flex' }}>
+                        <label>{this.state.productDetail.endDate}</label>
+                    </FormItem>
+                    <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 16}}  label="Total Price " style={{ display: 'flex' }}>
+                        <label>{this.state.productDetail.totalPrice}</label>
+                    </FormItem>
                 </Modal>
             </div >
         );
