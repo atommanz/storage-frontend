@@ -279,7 +279,7 @@ class UploadStaffData extends Component {
                     okButtonProps={{
                         disabled: (
                             !this.state.createBody.name
-                            || !this.state.createBody.descr
+                            // || !this.state.createBody.descr
                             || !this.state.createBody.startDate
                             || !this.state.createBody.category
                             || !this.state.createBody.width
@@ -298,12 +298,12 @@ class UploadStaffData extends Component {
                             }}
                         />
                     </FormItem>
-                    <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="Descr* " style={{ display: 'flex' }}>
+                    {/* <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="Descr* " style={{ display: 'flex' }}>
                         <Input
                             value={this.state.createBody.descr}
                             style={{ width: '90%' }}
                             onChange={(e) => { this.setState({ createBody: { ...this.state.createBody, descr: e.target.value } }) }} />
-                    </FormItem>
+                    </FormItem> */}
                     <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="Start Date* " style={{ display: 'flex' }}>
                         <DatePicker
                             // allowClear={true}
