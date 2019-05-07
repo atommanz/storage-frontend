@@ -343,7 +343,7 @@ class UploadStaffData extends Component {
                         <label>{this.state.productDetail.endDate}</label>
                     </FormItem>
                     <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} label="Total Price " style={{ display: 'flex' }}>
-                        <label>{this.state.productDetail.totalPrice}</label>
+                        <label>{this.state.productDetail.totalPrice} Baht.</label>
                     </FormItem>
                 </Modal>
 
@@ -360,7 +360,7 @@ class UploadStaffData extends Component {
                     ]}
                 >
                     <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} label="Name " style={{ display: 'flex' }}>
-                        <label>{this.state.checkoutProduct.name}</label>
+                        <label>{this.state.checkoutProduct.name} (category : {this.state.checkoutProduct.category})</label>
                     </FormItem>
                     <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} label="Start Date " style={{ display: 'flex' }}>
                         <label>{this.state.checkoutProduct.startDate}</label>
@@ -379,7 +379,7 @@ class UploadStaffData extends Component {
                         />
                     </FormItem>
                     <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} label="Total Price " style={{ display: 'flex' }}>
-                        <label>{this.state.totalPrice}</label>
+                        <label>{this.state.totalPrice} Baht.</label>
                     </FormItem>
                     {/* <Button onClick={(e) => {
                         this.apiGetPrice()
