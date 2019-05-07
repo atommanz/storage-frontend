@@ -55,6 +55,24 @@ class UploadStaffData extends Component {
             })
     }
 
+    apiCheckout() {
+        apiFetch({
+            url: `product/checkout`,
+            method: 'PUT',
+            body: this.state.checkoutProduct
+        })
+            .then((res) => {
+                console.log(res)
+                this.apiGetList()
+                // this.setState({ checkoutProduct: { ...this.state.checkoutProduct, totalPrice: String(res.data) } })
+                // this.setState({
+                //     totalPrice: String(res.data),
+                // });
+                // // this.props.history.push(`/storage`)
+                // this.apiGetList()
+            })
+    }
+
     apiGetPrice() {
         apiFetch({
             url: `product/price`,
@@ -63,9 +81,10 @@ class UploadStaffData extends Component {
         })
             .then((res) => {
                 console.log(res)
-                this.setState({
-                    totalPrice: String(res.data),
-                });
+                this.setState({ checkoutProduct: { ...this.state.checkoutProduct, totalPrice: String(res.data) } })
+                // this.setState({
+                //     totalPrice: String(res.data),
+                // });
                 // // this.props.history.push(`/storage`)
                 // this.apiGetList()
             })
@@ -91,8 +110,9 @@ class UploadStaffData extends Component {
             url: `product/${productId}`,
             method: 'GET',
         }).then(async (res) => {
-            await this.setState({ checkoutProduct: res.data, showCheckoutModal: true })
+            this.setState({ checkoutProduct: res.data, showCheckoutModal: true })
             console.log('res.data', res.data)
+            this.setState({ checkoutProduct: { ...this.state.checkoutProduct, _id: productId } })
             //   console.log(this.state.Datame)
         })
     }
@@ -155,6 +175,7 @@ class UploadStaffData extends Component {
     }
 
     handleCheckoutOk = async (e) => {
+        await this.apiCheckout()
         this.setState({
             showCheckoutModal: false,
         });
@@ -354,7 +375,16 @@ class UploadStaffData extends Component {
                     onCancel={this.handleCheckoutCancel}
                     footer={[
                         <Button key="Cancel" onClick={this.handleCheckoutCancel}>Cancel</Button>,
-                        <Button key="Checkout" type="primary" onClick={this.handleCheckoutOk}>
+                        <Button key="Checkout"
+                            type="primary"
+                            onClick={this.handleCheckoutOk}
+                            disabled={(
+                                !this.state.checkoutProduct.startDate
+                                || !this.state.checkoutProduct.endDate
+                                || !this.state.checkoutProduct._id
+                                || !this.state.checkoutProduct.totalPrice
+                            )}
+                        >
                             Checkout
                         </Button>,
                     ]}
@@ -379,7 +409,7 @@ class UploadStaffData extends Component {
                         />
                     </FormItem>
                     <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} label="Total Price " style={{ display: 'flex' }}>
-                        <label>{this.state.totalPrice} Baht.</label>
+                        <label>{this.state.checkoutProduct.totalPrice} Baht.</label>
                     </FormItem>
                     {/* <Button onClick={(e) => {
                         this.apiGetPrice()
