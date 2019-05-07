@@ -22,8 +22,11 @@ class UploadStaffData extends Component {
             filterStatus: '',
             showCreateModal: false,
             showInfoModal: false,
+            showCheckoutModal: false,
             createBody: {},
-            productDetail: {}
+            productDetail: {},
+            checkoutProduct: {},
+            totalPrice: ''
         }
 
         // this.onUploadChange = this.onUploadChange.bind(this)
@@ -52,6 +55,22 @@ class UploadStaffData extends Component {
             })
     }
 
+    apiGetPrice() {
+        apiFetch({
+            url: `product/price`,
+            method: 'POST',
+            body: this.state.checkoutProduct
+        })
+            .then((res) => {
+                console.log(res)
+                this.setState({
+                    totalPrice: String(res.data),
+                });
+                // // this.props.history.push(`/storage`)
+                // this.apiGetList()
+            })
+    }
+
     apiGetList() {
         apiFetch({
             url: 'product',
@@ -63,6 +82,17 @@ class UploadStaffData extends Component {
         }).then((res) => {
             this.setState({ listData: res.data })
             console.log('listData', this.state.listData)
+            //   console.log(this.state.Datame)
+        })
+    }
+
+    apiGetCheckoutProduct(productId) {
+        apiFetch({
+            url: `product/${productId}`,
+            method: 'GET',
+        }).then(async (res) => {
+            await this.setState({ checkoutProduct: res.data, showCheckoutModal: true })
+            console.log('res.data', res.data)
             //   console.log(this.state.Datame)
         })
     }
@@ -124,7 +154,18 @@ class UploadStaffData extends Component {
         });
     }
 
+    handleCheckoutOk = async (e) => {
+        this.setState({
+            showCheckoutModal: false,
+        });
 
+    }
+
+    handleCheckoutCancel = (e) => {
+        this.setState({
+            showCheckoutModal: false,
+        });
+    }
 
     render() {
 
@@ -169,6 +210,7 @@ class UploadStaffData extends Component {
                         type="primary"
                         onClick={(e) => {
                             this.props.history.push(`/storage/${record._id}`)
+                            this.apiGetCheckoutProduct(record._id)
                         }}
                     ><Icon type="dollar" />
 
@@ -234,7 +276,7 @@ class UploadStaffData extends Component {
                         )
                     }}
                 >
-                    <FormItem labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} label="Name* " style={{ display: 'flex' }}>
+                    <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="Name* " style={{ display: 'flex' }}>
                         <Input
                             style={{ width: '90%' }}
                             value={this.state.createBody.name}
@@ -244,13 +286,13 @@ class UploadStaffData extends Component {
                             }}
                         />
                     </FormItem>
-                    <FormItem labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} label="Descr* " style={{ display: 'flex' }}>
+                    <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="Descr* " style={{ display: 'flex' }}>
                         <Input
                             value={this.state.createBody.descr}
                             style={{ width: '90%' }}
                             onChange={(e) => { this.setState({ createBody: { ...this.state.createBody, descr: e.target.value } }) }} />
                     </FormItem>
-                    <FormItem labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} label="Start Date* " style={{ display: 'flex' }}>
+                    <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="Start Date* " style={{ display: 'flex' }}>
                         <DatePicker
                             // value={moment(this.state.createBody.startDate)}
                             format="DD/MM/YYYY HH:mm:ss"
@@ -259,7 +301,7 @@ class UploadStaffData extends Component {
                             onChange={(value, dateString) => { this.setState({ createBody: { ...this.state.createBody, startDate: dateString } }) }}
                         />
                     </FormItem>
-                    <FormItem labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} label="Category* " style={{ display: 'flex' }}>
+                    <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="Category* " style={{ display: 'flex' }}>
                         <Select value={this.state.createBody.category} style={{ width: 150 }} onChange={(e) => {
                             this.setState({ createBody: { ...this.state.createBody, category: e } })
                         }}>
@@ -269,16 +311,16 @@ class UploadStaffData extends Component {
                         </Select>
                     </FormItem>
 
-                    <FormItem labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} label="Width* " style={{ display: 'flex' }}>
+                    <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="Width (cm.)* " style={{ display: 'flex' }}>
                         <InputNumber value={this.state.createBody.width} min={0} max={100000} step={1} style={{ width: '50%' }} onChange={(e) => { this.setState({ createBody: { ...this.state.createBody, width: String(e) } }) }} />
                     </FormItem>
-                    <FormItem labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} label="Height* " style={{ display: 'flex' }}>
+                    <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="Height (cm.)* " style={{ display: 'flex' }}>
                         <InputNumber value={this.state.createBody.height} min={0} max={100000} step={1} style={{ width: '50%' }} onChange={(e) => { this.setState({ createBody: { ...this.state.createBody, height: String(e) } }) }} />
                     </FormItem>
-                    <FormItem labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} label="Depth* " style={{ display: 'flex' }}>
+                    <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="Depth (cm.)* " style={{ display: 'flex' }}>
                         <InputNumber value={this.state.createBody.depth} min={0} max={100000} step={1} style={{ width: '50%' }} onChange={(e) => { this.setState({ createBody: { ...this.state.createBody, depth: String(e) } }) }} />
                     </FormItem>
-                    <FormItem labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} label="Weight " style={{ display: 'flex' }}>
+                    <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="Weight (kg.) " style={{ display: 'flex' }}>
                         <InputNumber value={this.state.createBody.weight} min={0} max={100000} step={1} style={{ width: '50%' }} onChange={(e) => { this.setState({ createBody: { ...this.state.createBody, weight: String(e) } }) }} />
                     </FormItem>
 
@@ -291,18 +333,57 @@ class UploadStaffData extends Component {
                     onOk={this.handleInfoOk}
                     onCancel={this.handleInfoCancel}
                 >
-                    <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 16}} label="Name " style={{ display: 'flex' }}>
+                    <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} label="Name " style={{ display: 'flex' }}>
                         <label>{this.state.productDetail.name}</label>
                     </FormItem>
-                    <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 16}}  label="Start Date " style={{ display: 'flex' }}>
+                    <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} label="Start Date " style={{ display: 'flex' }}>
                         <label>{this.state.productDetail.startDate}</label>
                     </FormItem>
-                    <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 16}}  label="End Date " style={{ display: 'flex' }}>
+                    <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} label="End Date " style={{ display: 'flex' }}>
                         <label>{this.state.productDetail.endDate}</label>
                     </FormItem>
-                    <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 16}}  label="Total Price " style={{ display: 'flex' }}>
+                    <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} label="Total Price " style={{ display: 'flex' }}>
                         <label>{this.state.productDetail.totalPrice}</label>
                     </FormItem>
+                </Modal>
+
+                <Modal
+                    title="Checkout Product"
+                    visible={this.state.showCheckoutModal}
+                    onOk={this.handleCheckoutOk}
+                    onCancel={this.handleCheckoutCancel}
+                    footer={[
+                        <Button key="Cancel" onClick={this.handleCheckoutCancel}>Cancel</Button>,
+                        <Button key="Checkout" type="primary" onClick={this.handleCheckoutOk}>
+                            Checkout
+                        </Button>,
+                    ]}
+                >
+                    <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} label="Name " style={{ display: 'flex' }}>
+                        <label>{this.state.checkoutProduct.name}</label>
+                    </FormItem>
+                    <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} label="Start Date " style={{ display: 'flex' }}>
+                        <label>{this.state.checkoutProduct.startDate}</label>
+                    </FormItem>
+                    <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} label="End Date " style={{ display: 'flex' }}>
+                        <DatePicker
+
+                            format="DD/MM/YYYY HH:mm:ss"
+                            showTime
+                            placeholder="Select Time"
+                            onChange={async (value, dateString) => {
+                                await this.setState({ checkoutProduct: { ...this.state.checkoutProduct, endDate: dateString } })
+                                console.log(this.state.checkoutProduct)
+                                await this.apiGetPrice()
+                            }}
+                        />
+                    </FormItem>
+                    <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} label="Total Price " style={{ display: 'flex' }}>
+                        <label>{this.state.totalPrice}</label>
+                    </FormItem>
+                    {/* <Button onClick={(e) => {
+                        this.apiGetPrice()
+                    }}>aaa</Button> */}
                 </Modal>
             </div >
         );
