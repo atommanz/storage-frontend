@@ -38,6 +38,9 @@
   text-align: left
 }
 
+.ant-calendar-picker-clear {
+  opacity: 1;
+  }
 /* .App-link {
   color: #61dafb;
 } */

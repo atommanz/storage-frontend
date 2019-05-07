@@ -50,8 +50,8 @@ class UploadStaffData extends Component {
                 this.setState({
                     showCreateModal: false,
                 });
-                // this.props.history.push(`/storage`)
                 this.apiGetList()
+                window.location.href = '/storage'
             })
     }
 
@@ -64,12 +64,6 @@ class UploadStaffData extends Component {
             .then((res) => {
                 console.log(res)
                 this.apiGetList()
-                // this.setState({ checkoutProduct: { ...this.state.checkoutProduct, totalPrice: String(res.data) } })
-                // this.setState({
-                //     totalPrice: String(res.data),
-                // });
-                // // this.props.history.push(`/storage`)
-                // this.apiGetList()
             })
     }
 
@@ -82,11 +76,7 @@ class UploadStaffData extends Component {
             .then((res) => {
                 console.log(res)
                 this.setState({ checkoutProduct: { ...this.state.checkoutProduct, totalPrice: String(res.data) } })
-                // this.setState({
-                //     totalPrice: String(res.data),
-                // });
-                // // this.props.history.push(`/storage`)
-                // this.apiGetList()
+         
             })
     }
 
@@ -149,6 +139,7 @@ class UploadStaffData extends Component {
         console.log(`create id : ${idProduct}`)
         this.setState({
             showCreateModal: false,
+            createBody: {}
         });
 
     }
@@ -315,7 +306,8 @@ class UploadStaffData extends Component {
                     </FormItem>
                     <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="Start Date* " style={{ display: 'flex' }}>
                         <DatePicker
-                            // value={moment(this.state.createBody.startDate)}
+                            // allowClear={true}
+                            // value={this.state.createBody.startDate?this.state.createBody.startDate:null}
                             format="DD/MM/YYYY HH:mm:ss"
                             showTime
                             placeholder="Select Time"
@@ -397,7 +389,6 @@ class UploadStaffData extends Component {
                     </FormItem>
                     <FormItem labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} label="End Date " style={{ display: 'flex' }}>
                         <DatePicker
-
                             format="DD/MM/YYYY HH:mm:ss"
                             showTime
                             placeholder="Select Time"
