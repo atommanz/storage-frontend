@@ -12,17 +12,6 @@ const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
 class Main extends Component {
 
-    // componentDidMount() {
-    //     this._redirect()
-    // }
-
-    // _redirect = (props = this.props) => {
-    //     const { location, history } = props
-    //     if (location.pathname === '/') {
-    //         history.replace(`/download`)
-    //         //   this.setState({ current: `/download` })
-    //     }
-    // };
 
 
     handleClick = (e) => {
@@ -40,22 +29,12 @@ class Main extends Component {
         return (
 
             <Layout className="layout">
-                {/* <Header> */}
                 <div className="logo" />
                 <Menu
                     theme="light"
                     mode="horizontal"
-                    // defaultSelectedKeys={['1']}
                     onClick={this.handleClick}
-                // style={{ lineHeight: '60px' }}
-
                 >
-                    {/* <Menu.Item key="0"
-                        disabled
-                        style={{ cursor: 'context-menu' }}>
-                        <img src={logo} style={{ height: 35, cursor: 'context-menu' }} alt="logo" />
-                    </Menu.Item> */}
-
 
                     <Menu.Item key="1">
                         <Link to="/storage">
@@ -64,25 +43,6 @@ class Main extends Component {
                     </Menu.Item>
 
 
-                    {/* {window.sessionStorage.getItem('pos_role') === 'admin' || window.sessionStorage.getItem('pos_role') === 'developer' || window.sessionStorage.getItem('pos_role') === 'staffdata'
-                        ? (
-                            <Menu.Item key="2">
-
-                                <Link to="/pos-utils-2/staff">
-                                    <Icon type="user" theme="outlined" />Staff Data</Link>
-                            </Menu.Item>
-                        )
-                        : ''}
-
-                    {window.sessionStorage.getItem('pos_role') === 'developer'
-                        ? (
-                            <Menu.Item key="3">
-
-                                <Link to="/pos-utils-2/redux">
-                                    <Icon type="user" theme="outlined" />ReduxTest</Link>
-                            </Menu.Item>
-                        )
-                        : ''} */}
                     <SubMenu title={<span className="submenu-title-wrapper">
                         <Icon type="user" /></span>} style={{ float: 'right' }}>
                         <Menu.Item key="logout">
@@ -108,7 +68,7 @@ class Main extends Component {
                     </Switch>
 
                 </Content>
-                
+
             </Layout>
         )
     }

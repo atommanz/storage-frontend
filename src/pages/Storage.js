@@ -26,16 +26,16 @@ class UploadStaffData extends Component {
             createBody: {},
             productDetail: {},
             checkoutProduct: {},
-            totalPrice: ''
+            totalPrice: '',
+            bussinessProfits: '0'
         }
 
-        // this.onUploadChange = this.onUploadChange.bind(this)
-        // this.onUploadRemove = this.onUploadRemove.bind(this);
     }
 
 
     componentWillMount() {
         this.apiGetList()
+        this.apiGetBussinessProfit()
         this.setState({ createBody: { ...this.state.createBody, category: 'food' } })
     }
 
@@ -76,7 +76,20 @@ class UploadStaffData extends Component {
             .then((res) => {
                 console.log(res)
                 this.setState({ checkoutProduct: { ...this.state.checkoutProduct, totalPrice: String(res.data) } })
-         
+
+            })
+    }
+
+
+    apiGetBussinessProfit() {
+        apiFetch({
+            url: `product/price/profits`,
+            method: 'GET',
+        })
+            .then((res) => {
+                console.log('profit',res)
+                this.setState({ bussinessProfits: res.data })
+
             })
     }
 
@@ -265,7 +278,12 @@ class UploadStaffData extends Component {
                             </Select>
                         </Col>
                     </Row>
-
+                    <Row  style={{ marginTop: 20 }}>
+                        <Col span={12} >
+                            Bussiness Profits : {this.state.bussinessProfits} Baht.
+                        </Col>
+                        
+                    </Row>
 
                     <Table columns={columns} dataSource={this.state.listData} style={{ marginTop: 30 }} />
 
@@ -298,16 +316,10 @@ class UploadStaffData extends Component {
                             }}
                         />
                     </FormItem>
-                    {/* <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="Descr* " style={{ display: 'flex' }}>
-                        <Input
-                            value={this.state.createBody.descr}
-                            style={{ width: '90%' }}
-                            onChange={(e) => { this.setState({ createBody: { ...this.state.createBody, descr: e.target.value } }) }} />
-                    </FormItem> */}
+
                     <FormItem labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="Start Date* " style={{ display: 'flex' }}>
                         <DatePicker
-                            // allowClear={true}
-                            // value={this.state.createBody.startDate?this.state.createBody.startDate:null}
+
                             format="DD/MM/YYYY HH:mm:ss"
                             showTime
                             placeholder="Select Time"
